@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TicTacToeConsole
 {
@@ -6,13 +7,59 @@ namespace TicTacToeConsole
     {
         static TicTacToeMain game = new TicTacToeMain();
 
+        static bool isP1CPU = true;
+        static bool isP2CPU = true;
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("TicTacToe Console UI");
             game.GameChanged += Game_GameChanged;
             game.GameFinished += Game_GameFinished;
 
-            game.Initialize(GetPlayerInput) ;
+            Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
+            ConsoleMenuBase.ConfirmOption confirmOption = PlayOption;
+            dict.Add("play", confirmOption);
+            confirmOption = SettingsOption;
+            dict.Add("Settings", confirmOption);
+            confirmOption = ExitOption;
+            dict.Add("Exit", confirmOption);
+
+
+            ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Main Menu", dict);
+            menuScreen.OnConfirm += MenuScreen_OnConfirm;
+
+
+        }
+
+        private static void MenuScreen_OnConfirm(object sender, int e)
+        {
+
+        }
+
+        public static void PlayOption()
+        {
+            Console.Clear();
+            game.Initialize(GetPlayerInput);
+        }
+
+        public static void SettingsOption()
+        {
+            Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
+            ConsoleMenuBase.ConfirmOption confirmOption = PlayOption;
+            dict.Add($"Player 1 CPU? = {isP1CPU}", confirmOption);
+            //confirmOption = SettingsOption;
+            dict.Add($"Player 2 CPU? = {isP2CPU}", confirmOption);
+            // confirmOption = ExitOption;
+            dict.Add("Back", confirmOption);
+
+
+            ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Settings", dict);
+        }
+        public static void ExitOption()
+        {
+            Console.WriteLine("Closing Window....");
+            Environment.Exit(0);
         }
 
         private static void Game_GameFinished(object sender, Player e)
