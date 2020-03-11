@@ -9,7 +9,8 @@ namespace TicTacToeConsole
 
         static bool isP1CPU = true;
         static bool isP2CPU = true;
-
+        static Player.CPUDifficulty P1Difficulty = Player.CPUDifficulty.Normal;
+        static Player.CPUDifficulty P2Difficulty = Player.CPUDifficulty.Normal;
 
         static void Main(string[] args)
         {
@@ -17,6 +18,16 @@ namespace TicTacToeConsole
             game.GameChanged += Game_GameChanged;
             game.GameFinished += Game_GameFinished;
 
+            MainMenu();
+
+            //menuScreen.OnConfirm += MenuScreen_OnConfirm;
+
+
+        }
+
+
+        public static void MainMenu()
+        {
             Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
             ConsoleMenuBase.ConfirmOption confirmOption = PlayOption;
             dict.Add("play", confirmOption);
@@ -25,16 +36,7 @@ namespace TicTacToeConsole
             confirmOption = ExitOption;
             dict.Add("Exit", confirmOption);
 
-
             ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Main Menu", dict);
-            menuScreen.OnConfirm += MenuScreen_OnConfirm;
-
-
-        }
-
-        private static void MenuScreen_OnConfirm(object sender, int e)
-        {
-
         }
 
         public static void PlayOption()
@@ -46,11 +48,15 @@ namespace TicTacToeConsole
         public static void SettingsOption()
         {
             Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
-            ConsoleMenuBase.ConfirmOption confirmOption = PlayOption;
+            ConsoleMenuBase.ConfirmOption confirmOption = Settings_IsP1CPUOption;
             dict.Add($"Player 1 CPU? = {isP1CPU}", confirmOption);
-            //confirmOption = SettingsOption;
+            confirmOption = Settings_IsP2CPUOption;
             dict.Add($"Player 2 CPU? = {isP2CPU}", confirmOption);
-            // confirmOption = ExitOption;
+            confirmOption = Settings_P1Difficulty;
+            dict.Add($"Player 1 Difficulty = {P1Difficulty}", confirmOption);
+            confirmOption = Settings_P2Difficulty;
+            dict.Add($"Player 2 Difficulty = {P2Difficulty}", confirmOption);
+            confirmOption = Settings_BackOption;
             dict.Add("Back", confirmOption);
 
 
@@ -60,6 +66,46 @@ namespace TicTacToeConsole
         {
             Console.WriteLine("Closing Window....");
             Environment.Exit(0);
+        }
+        public static void Settings_P1Difficulty()
+        {
+            if(P1Difficulty == (Player.CPUDifficulty) 2)
+            {
+                P1Difficulty = 0;
+            }
+            else
+            {
+            P1Difficulty++;
+            }
+
+            SettingsOption();
+        }
+        public static void Settings_P2Difficulty()
+        {
+            if (P2Difficulty == (Player.CPUDifficulty)2)
+            {
+                P2Difficulty = 0;
+            }
+            else
+            {
+                P2Difficulty++;
+            }
+
+            SettingsOption();
+        }
+        public static void Settings_IsP1CPUOption()
+        {
+            isP1CPU = !isP1CPU;
+            SettingsOption();
+        }
+        public static void Settings_IsP2CPUOption()
+        {
+            isP2CPU = !isP2CPU;
+            SettingsOption();
+        }
+        public static void Settings_BackOption()
+        {
+            MainMenu();
         }
 
         private static void Game_GameFinished(object sender, Player e)

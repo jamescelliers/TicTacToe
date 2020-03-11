@@ -7,7 +7,6 @@ namespace TicTacToeConsole
 {
     public class ConsoleMenuBase
     {
-        public event EventHandler<int> OnConfirm;
         public delegate void ConfirmOption();
 
         private int selected = 0;
@@ -43,6 +42,8 @@ namespace TicTacToeConsole
         void DisplayElements()
         {
             Console.Clear();
+            Console.WriteLine("Use Up / Down Arrow Keys to change " +
+                "selection and Space or Enter or Confirm\n");
             Console.WriteLine(Title) ;
             for (int i = 0; i < Options.Count; i++)
             {
