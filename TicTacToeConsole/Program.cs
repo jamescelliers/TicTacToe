@@ -7,8 +7,8 @@ namespace TicTacToeConsole
     {
         static TicTacToeMain game = new TicTacToeMain();
 
-        static bool isP1CPU = true;
-        static bool isP2CPU = true;
+        static bool IsP1CPU = true;
+        static bool IsP2CPU = true;
         static Player.CPUDifficulty P1Difficulty = Player.CPUDifficulty.Normal;
         static Player.CPUDifficulty P2Difficulty = Player.CPUDifficulty.Normal;
 
@@ -41,15 +41,15 @@ namespace TicTacToeConsole
         public static void PlayOption()
         {
             Console.Clear();
-            game.Initialize(GetPlayerInput);
+            game.Initialize(GetPlayerInput, IsP1CPU, IsP2CPU, P1Difficulty, P2Difficulty) ;
         }
         public static void SettingsOption()
         {
             Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
             ConsoleMenuBase.ConfirmOption confirmOption = Settings_IsP1CPUOption;
-            dict.Add($"Player 1 CPU? = {isP1CPU}", confirmOption);
+            dict.Add($"Player 1 CPU? = {IsP1CPU}", confirmOption);
             confirmOption = Settings_IsP2CPUOption;
-            dict.Add($"Player 2 CPU? = {isP2CPU}", confirmOption);
+            dict.Add($"Player 2 CPU? = {IsP2CPU}", confirmOption);
             confirmOption = Settings_P1Difficulty;
             dict.Add($"Player 1 Difficulty = {P1Difficulty}", confirmOption);
             confirmOption = Settings_P2Difficulty;
@@ -93,12 +93,12 @@ namespace TicTacToeConsole
         }
         public static void Settings_IsP1CPUOption()
         {
-            isP1CPU = !isP1CPU;
+            IsP1CPU = !IsP1CPU;
             SettingsOption();
         }
         public static void Settings_IsP2CPUOption()
         {
-            isP2CPU = !isP2CPU;
+            IsP2CPU = !IsP2CPU;
             SettingsOption();
         }
         public static void Settings_BackOption()
@@ -128,7 +128,7 @@ namespace TicTacToeConsole
             //Console.WriteLine($"{FormatArrayToString(game.GameArray)}");
             Console.ReadLine();
             //Console.Clear();
-            game.RestartGame();
+            MainMenu();
 
         }
 

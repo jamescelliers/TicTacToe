@@ -38,11 +38,12 @@ namespace TicTacToeConsole
         /// initializes the game and assigns the input delegate
         /// </summary>
         /// <param name="inputDel">The method that returns input as an int</param>
-        public void Initialize(inputDelegate inputDel)
+        public void Initialize(inputDelegate inputDel, bool isP1CPU, bool isP2CPU,
+            Player.CPUDifficulty p1diff, Player.CPUDifficulty p2diff)
         {
             _inputDelegate = inputDel;
-            Player1 = new Player('O', 'X', false, true, this, Player.CPUDifficulty.Easy);
-            Player2 = new Player('X', '0', true, false, this, Player.CPUDifficulty.Easy);
+            Player1 = new Player('O', 'X', isP1CPU, true, this, p1diff);
+            Player2 = new Player('X', '0', isP2CPU, false, this, p2diff);
             RestartGame();
         }
 
