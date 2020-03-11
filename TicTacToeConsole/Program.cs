@@ -15,8 +15,8 @@ namespace TicTacToeConsole
         static void Main(string[] args)
         {
             Console.WriteLine("TicTacToe Console UI");
-            game.GameChanged += Game_GameChanged;
-            game.GameFinished += Game_GameFinished;
+            game.OnGameChanged += Game_OnGameChanged;
+            game.OnGameFinished += Game_OnGameFinished;
 
             MainMenu();
 
@@ -106,7 +106,7 @@ namespace TicTacToeConsole
             MainMenu();
         }
 
-        private static void Game_GameFinished(object sender, Player e)
+        private static void Game_OnGameFinished(object sender, Player e)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             string printText = "";
@@ -132,7 +132,7 @@ namespace TicTacToeConsole
 
         }
 
-        private static void Game_GameChanged(object sender, char[] e)
+        private static void Game_OnGameChanged(object sender, char[] e)
         {
             Console.WriteLine($"{FormatArrayToString(e)}");
         }

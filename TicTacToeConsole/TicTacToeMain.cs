@@ -8,8 +8,8 @@ namespace TicTacToeConsole
     public class TicTacToeMain
     {
 
-        public event EventHandler<char[]> GameChanged;
-        public event EventHandler<Player> GameFinished;
+        public event EventHandler<char[]> OnGameChanged;
+        public event EventHandler<Player> OnGameFinished;
 
         /// <summary>
         /// The method that returns player input
@@ -77,10 +77,10 @@ namespace TicTacToeConsole
                 GameArray[turnInt - 1] = currentPlayer.PlayerChar;
                 IsPlayer1Turn = !IsPlayer1Turn;
                 turnCount++;
-                GameChanged?.Invoke(this, GameArray);
+                OnGameChanged?.Invoke(this, GameArray);
                 if (CheckForWinner(currentPlayer.PlayerChar))
                 {
-                    GameFinished?.Invoke(this, currentPlayer);
+                    OnGameFinished?.Invoke(this, currentPlayer);
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace TicTacToeConsole
         {
             if (turnCount == 9)
             {
-                GameFinished?.Invoke(this, null);
+                OnGameFinished?.Invoke(this, null);
             }
             bool output = false; //output = IsAWinner;
             List<int> occupiedPlaces = new List<int>();
