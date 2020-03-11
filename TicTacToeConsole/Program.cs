@@ -38,13 +38,11 @@ namespace TicTacToeConsole
 
             ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Main Menu", dict);
         }
-
         public static void PlayOption()
         {
             Console.Clear();
             game.Initialize(GetPlayerInput);
         }
-
         public static void SettingsOption()
         {
             Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();

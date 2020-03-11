@@ -32,6 +32,7 @@ namespace TicTacToeConsole
                 }
             }
         }
+
         public ConsoleMenuBase(string title, Dictionary<string, ConfirmOption> _options)
         {
             Title = title;
@@ -58,7 +59,6 @@ namespace TicTacToeConsole
             }
             ReadInput();
         }
-
         void ReadInput()
         {
             ConsoleKey input = Console.ReadKey().Key;
@@ -87,7 +87,6 @@ namespace TicTacToeConsole
             DisplayElements();
 
         }
-
         void ConfirmSelected()
         {
             //OnConfirm?.Invoke(this, selected);
