@@ -61,8 +61,10 @@ namespace TicTacToeConsole
             GameLoop();
         }
 
-        //loops every turn
-        void GameLoop()
+        /// <summary>
+        /// Game Loop, each loop is a turn
+        /// </summary>
+        private protected void GameLoop()
         {
             while (turnCount <= 9)
             {
@@ -80,60 +82,71 @@ namespace TicTacToeConsole
                 IsPlayer1Turn = !IsPlayer1Turn;
                 turnCount++;
                 OnGameChanged?.Invoke(this, GameArray);
-                if (CheckForWinner(currentPlayer.PlayerChar))
+                if (CheckForWinner(currentPlayer.PlayerChar) || turnCount == 9)
                 {
-                    OnGameFinished?.Invoke(this, currentPlayer);
+                    if (CheckForWinner(currentPlayer.PlayerChar))
+                    {
+                        OnGameFinished?.Invoke(this, currentPlayer);
+                    }
+                    else
+                    { 
+                        OnGameFinished?.Invoke(this,null);
+                    }
                 }
             }
         }
 
-        // Checks if a winning coniditon has occured
+        /// <summary>
+        /// Checks if a winning coniditon has occured
+        /// </summary>
+        /// <param name="playerChar">char to check if won</param>
+        /// <returns>player char has matched 3!</returns>
         internal bool CheckForWinner(char playerChar)
         {
-            if (turnCount == 9)
-            {
-                OnGameFinished?.Invoke(this, null);
-            }
             bool output = false; //output = IsAWinner;
-            List<int> occupiedPlaces = new List<int>();
-            for (int i = 0; i < GameArray.Length; i++)
+            List<int> occupiedPlaces = new List<int>(); //list of postions occupied by player
+            for (int i = 0; i < GameArray.Length; i++) //fill list
             {
                 if (GameArray[i] == playerChar)
                 {
                     occupiedPlaces.Add(i);
                 }
             }
-            if (CheckForItemsInList(occupiedPlaces, 1, 2, 3) ||
-                CheckForItemsInList(occupiedPlaces, 4, 5, 6) ||
-                CheckForItemsInList(occupiedPlaces, 7, 8, 9) ||
-                CheckForItemsInList(occupiedPlaces, 3, 5, 7) ||
-                CheckForItemsInList(occupiedPlaces, 1, 4, 7) ||
-                CheckForItemsInList(occupiedPlaces, 2, 5, 8) ||
-                CheckForItemsInList(occupiedPlaces, 3, 6, 9) ||
-                CheckForItemsInList(occupiedPlaces, 1, 5, 9))
+            foreach (var item in WinConditions()) // cycle through win conditions and see if occupied places matches
             {
-                output = true;
+                if(CheckForItemsInList(occupiedPlaces, item))
+                {
+                    output = true;
+                }
+                
             }
             return output;
         }
 
-
-        //Chekcs for specific condition, used only by CheckForWinner
-        bool CheckForItemsInList(List<int> list, int i1, int i2, int i3)
+        /// <summary>
+        /// checks if a list contains all the items in a int[] array
+        /// </summary>
+        /// <param name="list">The list to check</param>
+        /// <param name="winCondition">The array to check data with list against</param>
+        /// <returns>whether the list contains all the items from int array</returns>
+        bool CheckForItemsInList(List<int> list, int[] winCondition)
         {
             bool output = false;
-            i1--;
-            i2--;
-            i3--;
-            if (list.Contains(i1) && list.Contains(i2) && list.Contains(i3))
+            winCondition[0]--;
+            winCondition[1]--;
+            winCondition[2]--;
+            if (winCondition.All(l => list.Contains(l)))
             {
                 output = true;
             }
             return output;
         }
 
-
-        //Checks if a char item in the game array equals EmptyChar and returns true if its taken
+        /// <summary>
+        /// Checks if a char item in the game array equals EmptyChar and returns true if its taken
+        /// </summary>
+        /// <param name="i">position in game array to check</param>
+        /// <returns>whether the positions is already taken</returns>
         public bool IsGameArrayElementTaken(int i)
         {
             bool isTaken = false;
@@ -144,18 +157,47 @@ namespace TicTacToeConsole
             return isTaken;
         }
 
+        /// <summary>
+        /// returns a list of in arrays, each array contains a win condtion
+        /// eg int[1,2,3] or int[3,5,7]
+        /// </summary>
+        /// <returns>a list of int arrays with each int[] containing a win condition </returns>
+        public List<int[]> WinConditions()
+        {
+            //int[] temp = new int[8];
+            List<int[]> list = new List<int[]>();
+            list.Add(new int[3] { 1, 2, 3 });
+            list.Add(new int[3] { 4, 5, 6 });
+            list.Add(new int[3] { 7, 8, 9 });
+            list.Add(new int[3] { 3, 5, 7 });
+            list.Add(new int[3] { 1, 4, 7 });
+            list.Add(new int[3] { 2, 5, 8 });
+            list.Add(new int[3] { 3, 6, 9 });
+            list.Add(new int[3] { 1, 5, 9 });
+            return list;
+        }
 
+        /// <summary>
+        /// Returns edges coordinates (not corners)
+        /// </summary>
+        /// <returns>list of 1, 3, 7 ,9</returns>
         List<int> GetCornerCoordinatesAsList()
         {
             return new List<int>() { 1, 3, 7, 9 };
         }
+        /// <summary>
+        /// Returns corner corordinates (not edge)
+        /// </summary>
+        /// <returns> List of 2, 4, 6 ,8</returns>
         List<int> GetEdgeCoorinatesAsList()
         {
             return new List<int>() { 2, 4, 6, 8 };
         }
-
-        //used IsPlayer1trurn and finds opposite player. Maybe use a param instead?
-        //The players contain an EnemyChar property so dont need to complicate things.
+        /// <summary>
+        /// Uses IsPlayer1Turn to find opponent char and returns a list of positions 
+        /// oppupied in the game array.
+        /// </summary>
+        /// <returns>A List of positions in the game array occupied by oppnent char</returns>
         public List<int> GetEnemyPositions()
         {
             List<int> enemyPositions = new List<int>();
