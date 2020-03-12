@@ -42,8 +42,8 @@ namespace TicTacToeConsole
             Player.CPUDifficulty p1diff, Player.CPUDifficulty p2diff)
         {
             _inputDelegate = inputDel;
-            Player1 = new Player('O', 'X', isP1CPU, true, this, p1diff);
-            Player2 = new Player('X', '0', isP2CPU, false, this, p2diff);
+            Player1 = new Player('O', 'X', isP1CPU, true, p1diff);
+            Player2 = new Player('X', 'O', isP2CPU, false, p2diff);
             RestartGame();
         }
 
@@ -57,6 +57,7 @@ namespace TicTacToeConsole
                 GameArray[i] = EmptyChar;
             }
             turnCount = 0;
+            OnGameChanged?.Invoke(this, GameArray);
             GameLoop();
         }
 
@@ -74,7 +75,7 @@ namespace TicTacToeConsole
                 {
                     currentPlayer = Player2;
                 }
-                int turnInt = currentPlayer.Turn();
+                int turnInt = currentPlayer.Turn(this);
                 GameArray[turnInt - 1] = currentPlayer.PlayerChar;
                 IsPlayer1Turn = !IsPlayer1Turn;
                 turnCount++;
@@ -155,7 +156,7 @@ namespace TicTacToeConsole
 
         //used IsPlayer1trurn and finds opposite player. Maybe use a param instead?
         //The players contain an EnemyChar property so dont need to complicate things.
-        List<int> GetEnemyPositions()
+        public List<int> GetEnemyPositions()
         {
             List<int> enemyPositions = new List<int>();
             Player enemyPlayer = Player1;

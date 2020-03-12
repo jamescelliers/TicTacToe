@@ -38,12 +38,7 @@ namespace TicTacToeConsole
 
             ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Main Menu", dict);
         }
-        public static void PlayOption()
-        {
-            Console.Clear();
-            game.Initialize(GetPlayerInput, IsP1CPU, IsP2CPU, P1Difficulty, P2Difficulty) ;
-        }
-        public static void SettingsOption()
+        private static void SettingsMenu()
         {
             Dictionary<string, ConsoleMenuBase.ConfirmOption> dict = new Dictionary<string, ConsoleMenuBase.ConfirmOption>();
             ConsoleMenuBase.ConfirmOption confirmOption = Settings_IsP1CPUOption;
@@ -59,6 +54,15 @@ namespace TicTacToeConsole
 
 
             ConsoleMenuBase menuScreen = new ConsoleMenuBase("TicTocToe Settings", dict);
+        }
+        public static void PlayOption()
+        {
+            Console.Clear();
+            game.Initialize(GetPlayerInput, IsP1CPU, IsP2CPU, P1Difficulty, P2Difficulty) ;
+        }
+        public static void SettingsOption()
+        {
+            SettingsMenu();
         }
         public static void ExitOption()
         {
@@ -131,10 +135,24 @@ namespace TicTacToeConsole
             MainMenu();
 
         }
-
         private static void Game_OnGameChanged(object sender, char[] e)
         {
-            Console.WriteLine($"{FormatArrayToString(e)}");
+            string turnText = "";
+            string charString = "";
+            if (game.IsPlayer1Turn)
+            {
+                turnText = "1";
+                charString = game.Player1.PlayerChar.ToString();
+
+            }
+            else
+            {
+                turnText = "2";
+                charString = game.Player2.PlayerChar.ToString();
+            }
+            Console.WriteLine($"Player {turnText} Turn ({charString}) \n");
+            Console.WriteLine($"{FormatArrayToString(e)} \n");
+            Console.WriteLine($"Player {turnText} Turn ({charString}) \n");
         }
 
         public static int GetPlayerInput()
